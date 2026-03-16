@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BADAS 2.0 Launch Brief</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23060612'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-size='18' fill='%2323e7d8' font-weight='bold'%3EB%3C/text%3E%3C/svg%3E">
+<style>
+@font-face { font-family: 'Hellix'; src: url('fonts/Hellix-Medium.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Hellix'; src: url('fonts/Hellix-SemiBold.otf') format('opentype'); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Hellix'; src: url('fonts/Hellix-Bold.otf') format('opentype'); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Roobert'; src: url('fonts/Roobert-Regular.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Roobert'; src: url('fonts/Roobert-Medium.otf') format('opentype'); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Roobert'; src: url('fonts/Roobert-SemiBold.otf') format('opentype'); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Roobert'; src: url('fonts/Roobert-Bold.otf') format('opentype'); font-weight: 700; font-style: normal; font-display: swap; }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #060612;
+  --bg-panel: oklch(10% 0.02 280);
+  --bg-alt: oklch(13% 0.02 280);
+  --green: #23e7d8;
+  --teal: #23e7d8;
+  --purple: #a183fa;
+  --light-purple: #c084fc;
+  --white: #fafafa;
+  --light-grey: #e8e8e8;
+  --text-bright: rgba(255,255,255,0.92);
+  --text-mid: rgba(255,255,255,0.78);
+  --text-dim: oklch(68% 0.02 280);
+  --text-muted: rgba(255,255,255,0.60);
+  --glass-bg: rgba(255,255,255,0.035);
+  --glass-border: rgba(255,255,255,0.07);
+  --glass-blur: 20px;
+  --section-pad-x: clamp(28px, 8vw, 140px);
+  --section-pad-y: clamp(80px, 12vh, 160px);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Roobert', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text-mid);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* NAV */
+.nav {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px var(--section-pad-x);
+  background: rgba(6,6,18,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.nav-logo { height: 22px; }
+.nav-title {
+  font-family: 'Roobert', system-ui, sans-serif;
+  font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--teal);
+}
+.nav-meta { font-size: 13px; color: var(--text-muted); }
+
+/* HERO */
+.hero-block {
+  position: relative; overflow: hidden;
+  min-height: 92vh; display: flex; flex-direction: column;
+  justify-content: center;
+  padding: clamp(60px, 14vh, 180px) var(--section-pad-x);
+}
+.hero-glow { position: absolute; border-radius: 50%; filter: blur(100px); pointer-events: none; }
+.hero-particle {
+  position: absolute; right: -5%; top: 5%; width: 55%; height: 90%;
+  object-fit: cover; opacity: 0.22;
+  mask-image: radial-gradient(ellipse 70% 60% at 75% 50%, black 20%, transparent 85%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 75% 50%, black 20%, transparent 85%);
+  animation: pulse 7s ease-in-out infinite;
+}
+.hero-chapter {
+  font-family: 'Roobert', system-ui, sans-serif;
+  font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--teal); margin-bottom: 20px;
+  position: relative; z-index: 2;
+}
+.hero-title {
+  font-family: 'Hellix', system-ui, sans-serif;
+  font-size: clamp(36px, 6vw, 88px); font-weight: 600;
+  color: var(--text-bright);
+  letter-spacing: -1.76px; line-height: 1.05;
+  margin-bottom: 24px; position: relative; z-index: 2; max-width: 800px;
+}
+.hero-sub {
+  font-family: 'Roobert', system-ui, sans-serif;
+  font-size: 22px; color: var(--text-mid);
+  max-width: 560px; line-height: 1.6; position: relative; z-index: 2;
+}
+.hero-scroll {
+  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+  z-index: 2; animation: hint 2.5s ease-in-out infinite;
+}
+.hero-scroll svg { width: 24px; height: 24px; stroke: var(--text-muted); }
+
+/* SECTION TEMPLATE */
+.tab-section {
+  position: relative; overflow: hidden;
+  padding: clamp(48px, 8vh, 100px) clamp(28px, 6vw, 80px);
+}
+.tab-section .tab-bg { position: absolute; inset: 0; z-index: 0; }
+.tab-section .tab-bg .tab-glow {
+  position: absolute; width: 50%; height: 70%;
+  border-radius: 50%; filter: blur(80px);
+}
+.tab-section .tab-bg .tab-particle-img {
+  position: absolute; right: 0; top: 0; width: 55%; height: 100%;
+  object-fit: cover; opacity: 0.18;
+  mask-image: linear-gradient(to left, black 10%, transparent 75%);
+  -webkit-mask-image: linear-gradient(to left, black 10%, transparent 75%);
+  animation: pulse 7s ease-in-out infinite;
+}
+.tab-section .tab-bg .tab-noise { position: absolute; inset: 0; opacity: 0.04; pointer-events: none; }
+.tab-section .tab-content-inner { position: relative; z-index: 3; max-width: 720px; }
+.tab-section .tab-content-inner.wide { max-width: 960px; }
+.tab-section.alt { background: rgba(255,255,255,0.015); }
+
+.tab-chapter {
+  font-family: 'Roobert', system-ui, sans-serif;
+  font-size: 13px; letter-spacing: 0.16em;
+  text-transform: uppercase; margin-bottom: 16px;
+}
+.tab-chapter.teal { color: var(--teal); }
+.tab-chapter.purple { color: var(--purple); }
+
+.tab-headline {
+  font-family: 'Hellix', system-ui, sans-serif;
+  font-size: clamp(28px, 4vw, 52px); font-weight: 600;
+  color: var(--text-bright);
+  letter-spacing: -1px; line-height: 1.1; margin-bottom: 20px;
+}
+.tab-copy {
+  font-family: 'Roobert', system-ui, sans-serif;
+  font-size: 18px; color: rgba(255,255,255,0.82);
+  max-width: 580px; line-height: 1.65; margin-bottom: 28px;
+}
+.tab-stat-row { display: flex; gap: clamp(24px, 4vw, 48px); flex-wrap: wrap; margin-top: 24px; }
+.tab-stat .n {
+  font-family: 'Roobert', system-ui, sans-serif;
+  font-size: clamp(24px, 3.5vw, 44px); font-weight: 600;
+  color: var(--teal); line-height: 1;
+}
+.tab-stat.purple .n { color: var(--purple); }
+.tab-stat .l {
+  font-family: 'Roobert', system-ui, sans-serif;
+  font-size: 14px; color: rgba(255,255,255,0.70);
+  margin-top: 6px; line-height: 1.4;
+}
+.tab-reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+.tab-reveal.visible { opacity: 1; transform: translateY(0); }
+.tab-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 0; }
+
+/* BLOCKQUOTE */
+.tab-quote {
+  border-left: 3px solid var(--teal);
+  padding: 16px 0 16px 24px; margin: 28px 0; max-width: 580px;
+}
+.tab-quote.purple-border { border-left-color: var(--purple); }
+.tab-quote p { font-size: 18px; color: rgba(255,255,255,0.82); line-height: 1.65; font-style: italic; }
+.tab-quote cite { display: block; margin-top: 10px; font-size: 14px; color: rgba(255,255,255,0.60); font-style: normal; }
+
+/* MODEL FAMILY CARDS */
+.model-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-top: 32px; }
+.model-card {
+  background: rgba(6,6,18,0.6); backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.07); border-radius: 8px; padding: 28px 24px;
+}
+.model-card-name { font-family: 'Hellix', system-ui, sans-serif; font-size: 22px; font-weight: 600; color: var(--text-bright); margin-bottom: 4px; }
+.model-card-params { font-size: 14px; color: var(--teal); margin-bottom: 16px; }
+.model-card-desc { font-size: 15px; color: rgba(255,255,255,0.72); line-height: 1.55; }
+
+/* DELIVERABLES - EXPANDABLE */
+.deliverable-list { margin-top: 28px; display: flex; flex-direction: column; gap: 8px; }
+.deliverable-item {
+  background: rgba(6,6,18,0.5); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;
+  transition: border-color 0.3s ease;
+  overflow: hidden;
+}
+.deliverable-item:hover { border-color: rgba(255,255,255,0.12); }
+.deliverable-header {
+  display: grid; grid-template-columns: 40px 1fr auto auto;
+  gap: 12px; align-items: center;
+  padding: 16px 24px; cursor: pointer;
+  user-select: none;
+}
+.deliverable-num {
+  font-family: 'Roobert', system-ui, sans-serif;
+  font-size: clamp(18px, 2vw, 24px); font-weight: 600;
+  color: var(--teal); line-height: 1;
+}
+.deliverable-item:nth-child(even) .deliverable-num { color: var(--purple); }
+.deliverable-title {
+  font-family: 'Hellix', system-ui, sans-serif;
+  font-size: 17px; font-weight: 600; color: var(--text-bright);
+}
+.deliverable-owner {
+  font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--teal); background: rgba(35,231,216,0.08);
+  padding: 4px 10px; border-radius: 4px; white-space: nowrap;
+}
+.deliverable-item:nth-child(even) .deliverable-owner {
+  color: var(--purple); background: rgba(161,131,250,0.08);
+}
+.deliverable-toggle {
+  width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
+  transition: transform 0.3s ease;
+}
+.deliverable-toggle svg { width: 14px; height: 14px; stroke: var(--text-muted); stroke-width: 2; fill: none; }
+.deliverable-item.open .deliverable-toggle { transform: rotate(180deg); }
+.deliverable-body {
+  display: grid; grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s ease;
+}
+.deliverable-item.open .deliverable-body { grid-template-rows: 1fr; }
+.deliverable-body-inner { overflow: hidden; }
+.deliverable-content {
+  padding: 0 24px 20px 76px;
+}
+.deliverable-desc {
+  font-size: 15px; color: rgba(255,255,255,0.72); line-height: 1.55; margin-bottom: 16px;
+}
+.subtask-list { display: flex; flex-direction: column; gap: 8px; }
+.subtask {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 14px; color: rgba(255,255,255,0.72); line-height: 1.5;
+}
+.subtask-dot {
+  width: 6px; height: 6px; border-radius: 50%; margin-top: 6px; flex-shrink: 0;
+  background: var(--teal);
+}
+.deliverable-item:nth-child(even) .subtask-dot { background: var(--purple); }
+.subtask-dep {
+  font-size: 12px; color: var(--text-muted); margin-top: 2px;
+}
+.dep-tag {
+  display: inline-block; font-size: 11px; letter-spacing: 0.05em;
+  padding: 2px 6px; border-radius: 3px; margin-right: 4px;
+  background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.60);
+}
+.dep-tag.blocker { background: rgba(192,132,252,0.12); color: var(--light-purple); }
+
+/* GANTT CHART */
+.gantt-wrapper {
+  margin-top: 32px; overflow-x: auto; padding-bottom: 8px;
+}
+.gantt {
+  min-width: 700px; position: relative;
+}
+.gantt-header {
+  display: grid; grid-template-columns: 180px repeat(14, 1fr);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  margin-bottom: 4px;
+}
+.gantt-header-label {
+  font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-muted); padding: 8px 4px; text-align: center;
+}
+.gantt-header-label:first-child { text-align: left; }
+.gantt-row {
+  display: grid; grid-template-columns: 180px repeat(14, 1fr);
+  align-items: center; min-height: 36px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.gantt-label {
+  font-size: 13px; color: rgba(255,255,255,0.78);
+  padding: 6px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.gantt-bar-cell {
+  position: relative; height: 22px;
+}
+.gantt-bar {
+  position: absolute; top: 2px; height: 18px;
+  border-radius: 3px; opacity: 0.85;
+}
+.gantt-bar.teal { background: linear-gradient(90deg, var(--teal), rgba(35,231,216,0.5)); }
+.gantt-bar.purple { background: linear-gradient(90deg, var(--purple), rgba(161,131,250,0.5)); }
+.gantt-bar.teal-light { background: linear-gradient(90deg, rgba(35,231,216,0.4), rgba(35,231,216,0.15)); }
+.gantt-bar.purple-light { background: linear-gradient(90deg, rgba(161,131,250,0.4), rgba(161,131,250,0.15)); }
+.gantt-today {
+  position: absolute; top: 0; bottom: 0; width: 2px;
+  background: var(--teal); opacity: 0.5; z-index: 2;
+}
+.gantt-today-label {
+  position: absolute; top: -18px; transform: translateX(-50%);
+  font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--teal); white-space: nowrap;
+}
+.gantt-milestone {
+  position: absolute; top: 4px;
+  width: 10px; height: 10px; transform: rotate(45deg);
+  border: 2px solid var(--teal);
+  background: var(--bg);
+}
+
+/* OPEN DECISIONS */
+.decisions-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px; margin-top: 28px;
+}
+.decision-card {
+  background: rgba(6,6,18,0.5);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-left: 3px solid var(--purple);
+  border-radius: 0 8px 8px 0; padding: 20px 24px;
+}
+.decision-card:nth-child(odd) { border-left-color: var(--teal); }
+.decision-label {
+  font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--purple); margin-bottom: 8px;
+}
+.decision-card:nth-child(odd) .decision-label { color: var(--teal); }
+.decision-text { font-size: 15px; color: rgba(255,255,255,0.78); line-height: 1.55; }
+
+/* CTA */
+.cta-section {
+  text-align: center;
+  padding: clamp(80px, 14vh, 180px) var(--section-pad-x);
+  position: relative; overflow: hidden;
+}
+.cta-particle {
+  position: absolute; left: -10%; bottom: -10%; width: 40%; height: 70%;
+  object-fit: cover; opacity: 0.15;
+  mask-image: radial-gradient(ellipse 70% 60% at 30% 60%, black 20%, transparent 85%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 30% 60%, black 20%, transparent 85%);
+  animation: pulse 7s ease-in-out infinite;
+}
+.cta-title {
+  font-family: 'Hellix', system-ui, sans-serif;
+  font-size: clamp(28px, 4vw, 56px); font-weight: 600;
+  color: var(--text-bright); letter-spacing: -1px; line-height: 1.1;
+  position: relative; z-index: 2; margin-bottom: 16px;
+}
+.cta-sub {
+  font-size: 18px; color: var(--text-mid); max-width: 480px;
+  margin: 0 auto 32px; line-height: 1.6;
+  position: relative; z-index: 2;
+}
+
+/* KEYFRAMES */
+@keyframes pulse {
+  0%, 100% { opacity: 0.18; transform: scale(1); }
+  50% { opacity: 0.22; transform: scale(1.02); }
+}
+@keyframes hint {
+  0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.5; }
+  50% { transform: translateX(-50%) translateY(8px); opacity: 1; }
+}
+
+/* RESPONSIVE */
+@media (max-width: 720px) {
+  .hero-block { min-height: 80vh; }
+  .hero-particle { width: 80%; opacity: 0.2; right: -15%; }
+  .tab-section .tab-bg .tab-particle-img { width: 70%; opacity: 0.2; }
+  .model-grid { grid-template-columns: 1fr; }
+  .deliverable-header { grid-template-columns: 32px 1fr auto; }
+  .deliverable-owner { display: none; }
+  .deliverable-content { padding-left: 56px; }
+  .decisions-grid { grid-template-columns: 1fr; }
+  .nav-meta { display: none; }
+  .gantt-wrapper { margin-left: -12px; margin-right: -12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <img class="nav-logo" src="fonts/nexar-logo.svg" alt="Nexar" onerror="this.outerHTML='<span style=&quot;color:#23e7d8;font-weight:700;font-size:16px;letter-spacing:0.05em&quot;>NEXAR</span>'">
+  <span class="nav-title">BADAS 2.0 Launch Brief</span>
+  <span class="nav-meta">Marketing Team / March 2026</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero-block">
+  <div class="hero-glow" style="top:15%;left:-10%;width:55%;height:70%;background:radial-gradient(ellipse,rgba(35,231,216,0.08),transparent 70%)"></div>
+  <img class="hero-particle" src="particles/collision-wonder.png" alt="" loading="lazy">
+  <div class="hero-chapter tab-reveal">BADAS 2.0 Launch Campaign</div>
+  <div class="hero-title tab-reveal">Nothing understands<br>risk better.<span style="color:#23e7d8"> Period.</span></div>
+  <div class="hero-sub tab-reveal">The single best collision prediction model on the planet. Research-proven. Outperforming NVIDIA Cosmos with 100x fewer parameters.</div>
+  <div class="hero-scroll">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+  </div>
+</div>
+<div class="tab-divider"></div>
+
+<!-- S1: CORE POSITIONING -->
+<div class="tab-section">
+  <div class="tab-bg">
+    <div class="tab-glow" style="top:10%;left:-10%;background:radial-gradient(ellipse,rgba(35,231,216,0.08),transparent 70%)"></div>
+    <img class="tab-particle-img" src="particles/data-sphere-hero.png" alt="" loading="lazy">
+    <svg class="tab-noise" width="100%" height="100%"><filter id="n1"><feTurbulence baseFrequency="0.65"/></filter><rect width="100%" height="100%" filter="url(#n1)"/></svg>
+  </div>
+  <div class="tab-content-inner">
+    <div class="tab-chapter teal tab-reveal">01 -- Core Positioning</div>
+    <div class="tab-headline tab-reveal">David vs Goliath.</div>
+    <div class="tab-copy tab-reveal">NVIDIA spent $26 billion building open models. Their Cosmos 2 has 2 billion parameters. BADAS 2.0 defeats it with 300 million parameters, and our smallest model does it with 22 million. That is 100x fewer parameters. Same training data. Fundamentally superior architecture.</div>
+    <div class="tab-quote tab-reveal">
+      <p>There is nothing that understands risk better than BADAS 2.0. Just imagine the amount of effort already put into creating Cosmos versus our investment and our team. This is totally a David versus Goliath story.</p>
+      <cite>Eran Shir, CEO</cite>
+    </div>
+    <div class="tab-stat-row tab-reveal">
+      <div class="tab-stat"><div class="n">94%</div><div class="l">mAP on Kaggle (BADAS 2.0)</div></div>
+      <div class="tab-stat purple"><div class="n">~85%</div><div class="l">mAP Cosmos (fine-tuned)</div></div>
+      <div class="tab-stat"><div class="n">2.5x</div><div class="l">Lower error rate</div></div>
+    </div>
+  </div>
+</div>
+<div class="tab-divider"></div>
+
+<!-- S2: MODEL FAMILY -->
+<div class="tab-section alt">
+  <div class="tab-bg">
+    <div class="tab-glow" style="top:20%;left:-5%;background:radial-gradient(ellipse,rgba(161,131,250,0.06),transparent 70%)"></div>
+    <img class="tab-particle-img" src="particles/brand-particle-sphere.png" alt="" loading="lazy">
+    <svg class="tab-noise" width="100%" height="100%"><filter id="n2"><feTurbulence baseFrequency="0.65"/></filter><rect width="100%" height="100%" filter="url(#n2)"/></svg>
+  </div>
+  <div class="tab-content-inner wide">
+    <div class="tab-chapter purple tab-reveal">02 -- Model Family</div>
+    <div class="tab-headline tab-reveal">Smaller. Cheaper. Better.</div>
+    <div class="tab-copy tab-reveal">BADAS 2.0 ships as a family of three models. Every size outperforms BADAS 1.0. The smallest runs on a CPU. No GPU required. Literally any device.</div>
+    <div class="model-grid tab-reveal">
+      <div class="model-card">
+        <div class="model-card-name">BADAS 2.0</div>
+        <div class="model-card-params">300M parameters</div>
+        <div class="model-card-desc">State-of-the-art collision prediction. Best time-to-alert. Exceptional on long-tail and out-of-distribution cases. The flagship.</div>
+      </div>
+      <div class="model-card">
+        <div class="model-card-name">BADAS 2.0 Flash</div>
+        <div class="model-card-params">87M parameters</div>
+        <div class="model-card-desc">Quarter the size of the flagship, still outperforms BADAS 1.0. Lower false positive rate than the full model. Ideal edge deployment.</div>
+      </div>
+      <div class="model-card">
+        <div class="model-card-name">BADAS 2.0 FlashLight</div>
+        <div class="model-card-params">22M parameters</div>
+        <div class="model-card-desc">Runs on CPU. 2.5ms per window on Jetson. On par with BADAS 1.0 at less than 10% the size. IoT-grade, ultra-light.</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="tab-divider"></div>
+
+<!-- S3: VS COSMOS -->
+<div class="tab-section">
+  <div class="tab-bg">
+    <div class="tab-glow" style="top:5%;left:-15%;background:radial-gradient(ellipse,rgba(35,231,216,0.06),transparent 70%)"></div>
+    <img class="tab-particle-img" src="particles/intersection-relief.png" alt="" loading="lazy">
+    <svg class="tab-noise" width="100%" height="100%"><filter id="n3"><feTurbulence baseFrequency="0.65"/></filter><rect width="100%" height="100%" filter="url(#n3)"/></svg>
+  </div>
+  <div class="tab-content-inner">
+    <div class="tab-chapter teal tab-reveal">03 -- The Smoking Gun</div>
+    <div class="tab-headline tab-reveal">World Model vs Autoregressive.</div>
+    <div class="tab-copy tab-reveal">Same data. Two architectures. BADAS uses a world model approach. Cosmos uses autoregressive prediction. On standard benchmarks, Cosmos performed adequately after fine-tuning. But on out-of-distribution scenarios, Cosmos completely failed to generalize. BADAS handled them natively.</div>
+    <div class="tab-copy tab-reveal">This is the validation of Yann LeCun's thesis. The world model learns generalization capabilities that autoregressive architectures cannot. And we have the numbers to prove it.</div>
+    <div class="tab-quote purple-border tab-reveal">
+      <p>Same data, two different architectures: autoregressive versus world model. The world model learns generalization capabilities. Autoregressive Cosmos does not. Although Cosmos has two billion parameters and we have just 300 million. This is the smoking gun.</p>
+      <cite>Ronnie Goldshmidt, Head of Research</cite>
+    </div>
+    <div class="tab-stat-row tab-reveal">
+      <div class="tab-stat"><div class="n">300M</div><div class="l">BADAS parameters</div></div>
+      <div class="tab-stat purple"><div class="n">2B</div><div class="l">Cosmos parameters</div></div>
+      <div class="tab-stat"><div class="n">100%</div><div class="l">Cosmos fail rate on OOD</div></div>
+    </div>
+  </div>
+</div>
+<div class="tab-divider"></div>
+
+<!-- S4: EXPLAINABILITY -->
+<div class="tab-section alt">
+  <div class="tab-bg">
+    <div class="tab-glow" style="top:15%;left:-8%;background:radial-gradient(ellipse,rgba(161,131,250,0.07),transparent 70%)"></div>
+    <img class="tab-particle-img" src="particles/road-map-belief.png" alt="" loading="lazy">
+    <svg class="tab-noise" width="100%" height="100%"><filter id="n4"><feTurbulence baseFrequency="0.65"/></filter><rect width="100%" height="100%" filter="url(#n4)"/></svg>
+  </div>
+  <div class="tab-content-inner">
+    <div class="tab-chapter purple tab-reveal">04 -- Explainability</div>
+    <div class="tab-headline tab-reveal">It shows its work.</div>
+    <div class="tab-copy tab-reveal">BADAS 2.0 generates attention-based heatmaps that reveal exactly what triggered an alert. The model's attention spreads across the entire road, then focuses sharply on the dangerous object the moment risk increases. Like a radar locking onto a target.</div>
+    <div class="tab-copy tab-reveal">This was not trained. It emerged natively from the architecture. And it comes with text descriptions and voice narration of the risk scenario. All model sizes support this, including FlashLight.</div>
+    <div class="tab-quote tab-reveal">
+      <p>The quality of the attention maps of the Flash model is even better than the original BADAS 2.0 model. I believe it is because we trained the small models using VJA method on large scale of our own data.</p>
+      <cite>Ronnie Goldshmidt, Head of Research</cite>
+    </div>
+    <div class="tab-stat-row tab-reveal">
+      <div class="tab-stat"><div class="n">Attention maps</div><div class="l">Visual explainability</div></div>
+      <div class="tab-stat purple"><div class="n">Voice + Text</div><div class="l">Narrated risk alerts</div></div>
+      <div class="tab-stat"><div class="n">All sizes</div><div class="l">Flash attention is even sharper</div></div>
+    </div>
+  </div>
+</div>
+<div class="tab-divider"></div>
+
+<!-- S5: NARRATIVE PILLARS -->
+<div class="tab-section">
+  <div class="tab-bg">
+    <div class="tab-glow" style="top:10%;left:-12%;background:radial-gradient(ellipse,rgba(35,231,216,0.05),transparent 70%)"></div>
+    <img class="tab-particle-img" src="particles/map-network.png" alt="" loading="lazy">
+    <svg class="tab-noise" width="100%" height="100%"><filter id="n5"><feTurbulence baseFrequency="0.65"/></filter><rect width="100%" height="100%" filter="url(#n5)"/></svg>
+  </div>
+  <div class="tab-content-inner">
+    <div class="tab-chapter teal tab-reveal">05 -- Narrative Pillars</div>
+    <div class="tab-headline tab-reveal">Five stories to tell.</div>
+    <div style="margin-top:8px" class="tab-reveal">
+      <div style="margin-bottom:28px">
+        <div style="font-family:'Hellix',system-ui,sans-serif;font-size:19px;font-weight:600;color:var(--text-bright);margin-bottom:6px">1. David vs Goliath</div>
+        <div style="font-size:16px;color:rgba(255,255,255,0.78);line-height:1.6;max-width:560px">NVIDIA spent $26B on open models. Our small team built something better with orders of magnitude fewer resources.</div>
+      </div>
+      <div style="margin-bottom:28px">
+        <div style="font-family:'Hellix',system-ui,sans-serif;font-size:19px;font-weight:600;color:var(--text-bright);margin-bottom:6px">2. World Models Win</div>
+        <div style="font-size:16px;color:rgba(255,255,255,0.78);line-height:1.6;max-width:560px">Same data, two architectures. BADAS generalizes. Cosmos does not. Validation of the world model thesis at the center of AI discourse.</div>
+      </div>
+      <div style="margin-bottom:28px">
+        <div style="font-family:'Hellix',system-ui,sans-serif;font-size:19px;font-weight:600;color:var(--text-bright);margin-bottom:6px">3. Compounding Data Advantage</div>
+        <div style="font-size:16px;color:rgba(255,255,255,0.78);line-height:1.6;max-width:560px">BADAS 2.0 was built using BADAS 1.0. No one else has access to our prior models, Atlas, or the dataset. The moat deepens with every iteration.</div>
+      </div>
+      <div style="margin-bottom:28px">
+        <div style="font-family:'Hellix',system-ui,sans-serif;font-size:19px;font-weight:600;color:var(--text-bright);margin-bottom:6px">4. Smaller, Cheaper, Better</div>
+        <div style="font-size:16px;color:rgba(255,255,255,0.78);line-height:1.6;max-width:560px">A full model family from 22M to 300M parameters. The smallest runs on CPU at 2.5ms. The edge story writes itself.</div>
+      </div>
+      <div>
+        <div style="font-family:'Hellix',system-ui,sans-serif;font-size:19px;font-weight:600;color:var(--text-bright);margin-bottom:6px">5. The Pepsi Challenge</div>
+        <div style="font-size:16px;color:rgba(255,255,255,0.78);line-height:1.6;max-width:560px">Open challenge to the industry. Release benchmark data. Let anyone try to beat it. No one will, and no one will open their closed models to try.</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="tab-divider"></div>
+
+<!-- S6: DELIVERABLES (expandable with sub-tasks) -->
+<div class="tab-section alt">
+  <div class="tab-bg">
+    <div class="tab-glow" style="top:10%;left:-10%;background:radial-gradient(ellipse,rgba(161,131,250,0.06),transparent 70%)"></div>
+    <img class="tab-particle-img" src="particles/exec-data-flow.png" alt="" loading="lazy">
+    <svg class="tab-noise" width="100%" height="100%"><filter id="n6"><feTurbulence baseFrequency="0.65"/></filter><rect width="100%" height="100%" filter="url(#n6)"/></svg>
+  </div>
+  <div class="tab-content-inner wide">
+    <div class="tab-chapter purple tab-reveal">06 -- Deliverables</div>
+    <div class="tab-headline tab-reveal">What needs to ship.</div>
+    <div class="tab-copy tab-reveal" style="font-size:15px;color:var(--text-muted)">Click any deliverable to expand sub-tasks and dependencies.</div>
+
+    <div class="deliverable-list tab-reveal">
+
+      <!-- D1: Headline Claim -->
+      <div class="deliverable-item">
+        <div class="deliverable-header" onclick="this.parentElement.classList.toggle('open')">
+          <div class="deliverable-num">01</div>
+          <div class="deliverable-title">Headline Claim</div>
+          <div class="deliverable-owner">Marketing</div>
+          <div class="deliverable-toggle"><svg viewBox="0 0 14 14"><path d="M3 5l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="deliverable-body"><div class="deliverable-body-inner"><div class="deliverable-content">
+          <div class="deliverable-desc">One-liner positioning statement. "Best collision prediction model on the planet" or equivalent. Must be defensible, quotable, and legally clear.</div>
+          <div class="subtask-list">
+            <div class="subtask"><div class="subtask-dot"></div><div>Draft 5 headline candidates with supporting evidence for each</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Legal review of top 2 claims for defensibility</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>C-staff sign-off on final wording</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div><div class="subtask-dep"><span class="dep-tag blocker">blocks</span> Landing Page, Social Content, Investor Package</div></div></div>
+          </div>
+        </div></div></div>
+      </div>
+
+      <!-- D2: Landing Page -->
+      <div class="deliverable-item">
+        <div class="deliverable-header" onclick="this.parentElement.classList.toggle('open')">
+          <div class="deliverable-num">02</div>
+          <div class="deliverable-title">Landing Page / Microsite</div>
+          <div class="deliverable-owner">Marketing</div>
+          <div class="deliverable-toggle"><svg viewBox="0 0 14 14"><path d="M3 5l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="deliverable-body"><div class="deliverable-body-inner"><div class="deliverable-content">
+          <div class="deliverable-desc">The public face of the launch. Hero claim, interactive demo embed, research numbers, benchmark dashboard.</div>
+          <div class="subtask-list">
+            <div class="subtask"><div class="subtask-dot"></div><div>Wireframe and page structure (Marketing)</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Copy deck aligned to headline claim<div class="subtask-dep"><span class="dep-tag blocker">needs</span> Headline Claim</div></div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Embed API Playground widget<div class="subtask-dep"><span class="dep-tag blocker">needs</span> API Playground</div></div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Integrate benchmark charts<div class="subtask-dep"><span class="dep-tag blocker">needs</span> Benchmark Charts</div></div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Embed comparison + explainability videos<div class="subtask-dep"><span class="dep-tag blocker">needs</span> Video Assets</div></div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>QA, mobile optimization, performance audit</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Deploy to production URL</div></div>
+          </div>
+        </div></div></div>
+      </div>
+
+      <!-- D3: API Playground -->
+      <div class="deliverable-item">
+        <div class="deliverable-header" onclick="this.parentElement.classList.toggle('open')">
+          <div class="deliverable-num">03</div>
+          <div class="deliverable-title">API Playground</div>
+          <div class="deliverable-owner">NAP Team</div>
+          <div class="deliverable-toggle"><svg viewBox="0 0 14 14"><path d="M3 5l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="deliverable-body"><div class="deliverable-body-inner"><div class="deliverable-content">
+          <div class="deliverable-desc">Deploy all 3 models on NAP infrastructure. Public API endpoint where visitors upload videos and get predictions. End the "send us your video" loop.</div>
+          <div class="subtask-list">
+            <div class="subtask"><div class="subtask-dot"></div><div>Deploy BADAS 2.0 (300M) to NAP inference endpoint</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Deploy Flash (87M) and FlashLight (22M) endpoints</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Build video upload + results UI widget (embeddable)</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Rate limiting + abuse protection for public access</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>API documentation for developer access</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Load testing at expected launch traffic</div></div>
+          </div>
+        </div></div></div>
+      </div>
+
+      <!-- D4: Benchmark Dataset -->
+      <div class="deliverable-item">
+        <div class="deliverable-header" onclick="this.parentElement.classList.toggle('open')">
+          <div class="deliverable-num">04</div>
+          <div class="deliverable-title">Benchmark Dataset Release</div>
+          <div class="deliverable-owner">Product</div>
+          <div class="deliverable-toggle"><svg viewBox="0 0 14 14"><path d="M3 5l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="deliverable-body"><div class="deliverable-body-inner"><div class="deliverable-content">
+          <div class="deliverable-desc">Curated subset of long-tail edge cases: animals, cyclists, snow, infrastructure. Enough to prove the claim without giving away competitive advantage.</div>
+          <div class="subtask-list">
+            <div class="subtask"><div class="subtask-dot"></div><div>Research team selects candidate edge cases from long-tail test set</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Product + C-staff determine release scope (volume, categories)</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Legal review of data licensing terms</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Package dataset with documentation and evaluation scripts</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Host on public repository (HuggingFace or similar)</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div><div class="subtask-dep"><span class="dep-tag blocker">blocks</span> Open Challenge credibility</div></div></div>
+          </div>
+        </div></div></div>
+      </div>
+
+      <!-- D5: Comparison Videos -->
+      <div class="deliverable-item">
+        <div class="deliverable-header" onclick="this.parentElement.classList.toggle('open')">
+          <div class="deliverable-num">05</div>
+          <div class="deliverable-title">Comparison Videos</div>
+          <div class="deliverable-owner">Marketing</div>
+          <div class="deliverable-toggle"><svg viewBox="0 0 14 14"><path d="M3 5l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="deliverable-body"><div class="deliverable-body-inner"><div class="deliverable-content">
+          <div class="deliverable-desc">BADAS vs Cosmos side-by-side on identical scenarios. Two tiers: mobile-optimized for social and detailed for solution architects.</div>
+          <div class="subtask-list">
+            <div class="subtask"><div class="subtask-dot"></div><div>Source externally-sharable video clips (Marketing to provide)</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Run BADAS 2.0 + fine-tuned Cosmos on approved clips (Research)</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Produce Tier 1: social-optimized (minimal annotation, readable at phone size)</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Produce Tier 2: detailed technical version (full annotation for large screen)</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Captions, branding, format for each platform (LinkedIn, X, YouTube)</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div><div class="subtask-dep"><span class="dep-tag blocker">needs</span> Externally sharable footage clearance</div></div></div>
+          </div>
+        </div></div></div>
+      </div>
+
+      <!-- D6: Explainability Videos -->
+      <div class="deliverable-item">
+        <div class="deliverable-header" onclick="this.parentElement.classList.toggle('open')">
+          <div class="deliverable-num">06</div>
+          <div class="deliverable-title">Explainability Demo Videos</div>
+          <div class="deliverable-owner">Marketing</div>
+          <div class="deliverable-toggle"><svg viewBox="0 0 14 14"><path d="M3 5l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="deliverable-body"><div class="deliverable-body-inner"><div class="deliverable-content">
+          <div class="deliverable-desc">Attention maps, text descriptions, voice narration. Demonstrate the "radar lock" behavior. Same two-tier approach as comparison videos.</div>
+          <div class="subtask-list">
+            <div class="subtask"><div class="subtask-dot"></div><div>Select best attention map examples (animal, pedestrian, vehicle scenarios)</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Generate attention visualizations via API (Research)</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Record voice narration overlay</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Produce Tier 1 (social) and Tier 2 (technical) versions</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div><div class="subtask-dep"><span class="dep-tag blocker">needs</span> API Playground deployed for generation</div></div></div>
+          </div>
+        </div></div></div>
+      </div>
+
+      <!-- D7: Research Presentation -->
+      <div class="deliverable-item">
+        <div class="deliverable-header" onclick="this.parentElement.classList.toggle('open')">
+          <div class="deliverable-num">07</div>
+          <div class="deliverable-title">Research Presentation</div>
+          <div class="deliverable-owner">C-Staff</div>
+          <div class="deliverable-toggle"><svg viewBox="0 0 14 14"><path d="M3 5l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="deliverable-body"><div class="deliverable-body-inner"><div class="deliverable-content">
+          <div class="deliverable-desc">Board-ready deck with all benchmarks. Designed for board forum distribution and Yann LeCun network amplification.</div>
+          <div class="subtask-list">
+            <div class="subtask"><div class="subtask-dot"></div><div>Compile all finalized benchmark numbers into presentation format</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>World model narrative framing (LeCun thesis context)</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Visual design aligned to brand (Marketing support)</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Board forum distribution strategy and timing</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div><div class="subtask-dep"><span class="dep-tag blocker">needs</span> Benchmark Charts finalized</div></div></div>
+          </div>
+        </div></div></div>
+      </div>
+
+      <!-- D8: Investor Package -->
+      <div class="deliverable-item">
+        <div class="deliverable-header" onclick="this.parentElement.classList.toggle('open')">
+          <div class="deliverable-num">08</div>
+          <div class="deliverable-title">Investor Narrative Package</div>
+          <div class="deliverable-owner">C-Staff</div>
+          <div class="deliverable-toggle"><svg viewBox="0 0 14 14"><path d="M3 5l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="deliverable-body"><div class="deliverable-body-inner"><div class="deliverable-content">
+          <div class="deliverable-desc">Timed before investor conversations. Tease capability in meetings this week, full launch within two weeks.</div>
+          <div class="subtask-list">
+            <div class="subtask"><div class="subtask-dot"></div><div>Teaser talking points for immediate investor conversations</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Full narrative deck integrating research presentation</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>One-pager leave-behind with key claims and links</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div><div class="subtask-dep"><span class="dep-tag blocker">needs</span> Headline Claim, Benchmark Charts</div></div></div>
+          </div>
+        </div></div></div>
+      </div>
+
+      <!-- D9: Benchmark Charts -->
+      <div class="deliverable-item">
+        <div class="deliverable-header" onclick="this.parentElement.classList.toggle('open')">
+          <div class="deliverable-num">09</div>
+          <div class="deliverable-title">Performance Benchmark Charts</div>
+          <div class="deliverable-owner">Product</div>
+          <div class="deliverable-toggle"><svg viewBox="0 0 14 14"><path d="M3 5l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="deliverable-body"><div class="deliverable-body-inner"><div class="deliverable-content">
+          <div class="deliverable-desc">mAP on Kaggle, long-tail AP, false positive rates, model size vs performance. Add Cosmos to all existing charts.</div>
+          <div class="subtask-list">
+            <div class="subtask"><div class="subtask-dot"></div><div>Finalize remaining benchmark runs (Research)</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Calculate Cosmos metrics on same test sets for apples-to-apples comparison</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Build OOD generalization benchmark (new test set)</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Design publication-quality chart visuals (Marketing)</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Create model size vs performance scatter plot</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div><div class="subtask-dep"><span class="dep-tag blocker">blocks</span> Landing Page, Research Deck, Investor Package</div></div></div>
+          </div>
+        </div></div></div>
+      </div>
+
+      <!-- D10: Open Challenge -->
+      <div class="deliverable-item">
+        <div class="deliverable-header" onclick="this.parentElement.classList.toggle('open')">
+          <div class="deliverable-num">10</div>
+          <div class="deliverable-title">Open Challenge</div>
+          <div class="deliverable-owner">Marketing</div>
+          <div class="deliverable-toggle"><svg viewBox="0 0 14 14"><path d="M3 5l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="deliverable-body"><div class="deliverable-body-inner"><div class="deliverable-content">
+          <div class="deliverable-desc">Public invitation: "You have a better model? Prove it." Release benchmark data. Reinforce confidence and frame real-world data as the winning approach.</div>
+          <div class="subtask-list">
+            <div class="subtask"><div class="subtask-dot"></div><div>Define challenge rules, evaluation criteria, and submission process</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Build challenge page (section on Landing Page or standalone)</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>Link to public benchmark dataset</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div>PR/social campaign around the challenge launch</div></div>
+            <div class="subtask"><div class="subtask-dot"></div><div><div class="subtask-dep"><span class="dep-tag blocker">needs</span> Benchmark Dataset, Landing Page</div></div></div>
+          </div>
+        </div></div></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="tab-divider"></div>
+
+<!-- S7: GANTT + DECISIONS -->
+<div class="tab-section">
+  <div class="tab-bg">
+    <div class="tab-glow" style="top:15%;left:-10%;background:radial-gradient(ellipse,rgba(35,231,216,0.06),transparent 70%)"></div>
+    <img class="tab-particle-img" src="particles/sprint-infrastructure.png" alt="" loading="lazy">
+    <svg class="tab-noise" width="100%" height="100%"><filter id="n7"><feTurbulence baseFrequency="0.65"/></filter><rect width="100%" height="100%" filter="url(#n7)"/></svg>
+  </div>
+  <div class="tab-content-inner wide">
+    <div class="tab-chapter teal tab-reveal">07 -- Timeline</div>
+    <div class="tab-headline tab-reveal">Two weeks. No more.</div>
+    <div class="tab-copy tab-reveal">Investor conversations are active now. The launch must land by March 26 or tease credibly enough to carry momentum into those meetings.</div>
+
+    <!-- GANTT CHART -->
+    <div class="gantt-wrapper tab-reveal">
+      <div class="gantt" style="position:relative">
+        <!-- Today marker: Mar 16 = day 1 of 14 -->
+        <div class="gantt-today" style="left:calc(180px + (0.5 / 14) * (100% - 180px))">
+          <div class="gantt-today-label">Today</div>
+        </div>
+        <!-- Header: 14 days Mar 16-29 -->
+        <div class="gantt-header">
+          <div class="gantt-header-label" style="text-align:left">Deliverable</div>
+          <div class="gantt-header-label">16</div>
+          <div class="gantt-header-label">17</div>
+          <div class="gantt-header-label">18</div>
+          <div class="gantt-header-label">19</div>
+          <div class="gantt-header-label">20</div>
+          <div class="gantt-header-label">21</div>
+          <div class="gantt-header-label">22</div>
+          <div class="gantt-header-label">23</div>
+          <div class="gantt-header-label">24</div>
+          <div class="gantt-header-label">25</div>
+          <div class="gantt-header-label">26</div>
+          <div class="gantt-header-label">27</div>
+          <div class="gantt-header-label">28</div>
+          <div class="gantt-header-label">29</div>
+        </div>
+        <!-- Weekend shading -->
+
+        <!-- Row: Benchmark Charts (day 1-6) -->
+        <div class="gantt-row">
+          <div class="gantt-label">Benchmark Charts</div>
+          <div class="gantt-bar-cell" style="grid-column: 2 / 8"><div class="gantt-bar teal" style="left:0;right:0"></div></div>
+        </div>
+        <!-- Row: Headline Claim (day 1-4) -->
+        <div class="gantt-row">
+          <div class="gantt-label">Headline Claim</div>
+          <div class="gantt-bar-cell" style="grid-column: 2 / 6"><div class="gantt-bar purple" style="left:0;right:0"></div></div>
+        </div>
+        <!-- Row: API Playground (day 1-8) -->
+        <div class="gantt-row">
+          <div class="gantt-label">API Playground</div>
+          <div class="gantt-bar-cell" style="grid-column: 2 / 10"><div class="gantt-bar teal" style="left:0;right:0"></div></div>
+        </div>
+        <!-- Row: Benchmark Dataset (day 2-7) -->
+        <div class="gantt-row">
+          <div class="gantt-label">Benchmark Dataset</div>
+          <div class="gantt-bar-cell" style="grid-column: 3 / 9"><div class="gantt-bar purple" style="left:0;right:0"></div></div>
+        </div>
+        <!-- Row: Comparison Videos (day 3-9) -->
+        <div class="gantt-row">
+          <div class="gantt-label">Comparison Videos</div>
+          <div class="gantt-bar-cell" style="grid-column: 4 / 10"><div class="gantt-bar teal-light" style="left:0;right:0"></div></div>
+        </div>
+        <!-- Row: Explainability Videos (day 4-10) -->
+        <div class="gantt-row">
+          <div class="gantt-label">Explainability Videos</div>
+          <div class="gantt-bar-cell" style="grid-column: 5 / 11"><div class="gantt-bar purple-light" style="left:0;right:0"></div></div>
+        </div>
+        <!-- Row: Research Deck (day 5-9) -->
+        <div class="gantt-row">
+          <div class="gantt-label">Research Deck</div>
+          <div class="gantt-bar-cell" style="grid-column: 6 / 10"><div class="gantt-bar purple" style="left:0;right:0"></div></div>
+        </div>
+        <!-- Row: Investor Package (day 1-3 teaser, day 7-10 full) -->
+        <div class="gantt-row">
+          <div class="gantt-label">Investor Package</div>
+          <div class="gantt-bar-cell" style="grid-column: 2 / 4"><div class="gantt-bar teal-light" style="left:0;right:0"></div></div>
+          <div class="gantt-bar-cell" style="grid-column: 8 / 11"><div class="gantt-bar teal" style="left:0;right:0"></div></div>
+        </div>
+        <!-- Row: Landing Page (day 5-11) -->
+        <div class="gantt-row">
+          <div class="gantt-label">Landing Page</div>
+          <div class="gantt-bar-cell" style="grid-column: 6 / 12"><div class="gantt-bar teal" style="left:0;right:0"></div></div>
+        </div>
+        <!-- Row: Open Challenge (day 9-11) -->
+        <div class="gantt-row">
+          <div class="gantt-label">Open Challenge</div>
+          <div class="gantt-bar-cell" style="grid-column: 10 / 12"><div class="gantt-bar purple" style="left:0;right:0"></div></div>
+        </div>
+        <!-- Row: LAUNCH -->
+        <div class="gantt-row">
+          <div class="gantt-label" style="color:var(--teal);font-weight:600">LAUNCH</div>
+          <div class="gantt-bar-cell" style="grid-column: 12 / 13;display:flex;align-items:center;justify-content:center">
+            <div class="gantt-milestone"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div style="display:flex;gap:24px;margin-top:20px;flex-wrap:wrap" class="tab-reveal">
+      <div style="display:flex;align-items:center;gap:8px"><div style="width:24px;height:8px;border-radius:2px;background:linear-gradient(90deg,var(--teal),rgba(35,231,216,0.5))"></div><span style="font-size:13px;color:var(--text-muted)">NAP / Marketing</span></div>
+      <div style="display:flex;align-items:center;gap:8px"><div style="width:24px;height:8px;border-radius:2px;background:linear-gradient(90deg,var(--purple),rgba(161,131,250,0.5))"></div><span style="font-size:13px;color:var(--text-muted)">Product / C-Staff</span></div>
+      <div style="display:flex;align-items:center;gap:8px"><div style="width:24px;height:8px;border-radius:2px;background:linear-gradient(90deg,rgba(35,231,216,0.4),rgba(35,231,216,0.15))"></div><span style="font-size:13px;color:var(--text-muted)">Dependent / phased</span></div>
+      <div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;transform:rotate(45deg);border:2px solid var(--teal)"></div><span style="font-size:13px;color:var(--text-muted)">Milestone</span></div>
+    </div>
+
+    <div style="margin-top:48px" class="tab-reveal">
+      <div class="tab-chapter purple" style="margin-bottom:20px">Open Decisions</div>
+      <div class="decisions-grid">
+        <div class="decision-card">
+          <div class="decision-label">Dataset Scope</div>
+          <div class="decision-text">How many edge cases to release publicly. Enough to prove the claim, not enough to give away the competitive advantage.</div>
+        </div>
+        <div class="decision-card">
+          <div class="decision-label">Cosmos Framing</div>
+          <div class="decision-text">Team comfortable being direct. "Not that Cosmos is bad, just not close to BADAS." Need precise tone for public comms.</div>
+        </div>
+        <div class="decision-card">
+          <div class="decision-label">Yann LeCun Timing</div>
+          <div class="decision-text">Board presentation timing and network amplification depend on readiness of research deck. C-staff to coordinate.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="tab-divider"></div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <img class="cta-particle" src="particles/dna-growth-cta.png" alt="" loading="lazy">
+  <div class="cta-title tab-reveal">The biggest moment<br>in company history.<span style="color:#23e7d8"> Make it count.</span></div>
+  <div class="cta-sub tab-reveal">Two weeks to ship. Ten deliverables. One message: nothing understands risk better than BADAS 2.0.</div>
+</div>
+
+<!-- FOOTER -->
+<div style="padding:24px var(--section-pad-x);border-top:1px solid rgba(255,255,255,0.07);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+  <span style="font-size:13px;color:rgba(255,255,255,0.60)">BADAS 2.0 Launch Brief / Marketing Team / March 2026</span>
+  <span style="font-size:13px;color:rgba(255,255,255,0.60)">Source: Mar 12 BADAS Launch Transcript</span>
+</div>
+
+<script>
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.tab-reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
